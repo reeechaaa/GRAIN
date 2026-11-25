@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -20,11 +21,15 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Build debug APK
+      - name: Extract GRAIN project
+        run: unzip -q GRAIN-Android-project.zip -d project
+
+      - name: Build APK
+        working-directory: project/GRAIN-Android
         run: gradle assembleDebug
 
-      - name: Upload APK artifact
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: GRAIN-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: GRAIN-APK
+          path: project/GRAIN-Android/app/build/outputs/apk/debug/app-debug.apk
